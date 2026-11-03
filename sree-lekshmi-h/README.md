@@ -56,9 +56,8 @@ RecipePilot addresses these challenges by bringing recipe discovery, AI-powered 
 ## Architecture
 
 RecipePilot follows a client-server architecture consisting of a Streamlit frontend and a FastAPI backend.
-flowchart TD
 ```mermaid
-    flowchart TD
+flowchart TD
     U(["User"])
 
     subgraph FE["Streamlit Frontend"]
@@ -73,15 +72,14 @@ flowchart TD
         API["API Routes with Pydantic validation"]
         S1["Recipe Search and Details Services"]
         S4["PDF Ingestion Service"]
-        S7["Shopping List Service - calls ask_assistant"]
+        S7["Shopping List Service"]
     end
 
-    subgraph AGENT["Agent and Tool Layer"]
-        AG["Cooking Assistant Agent - selects a tool or answers directly"]
+    subgraph AGENT["AI Agent and Tools"]
+        AG["Cooking Assistant Agent"]
         T1["search_recipes"]
         T2["search_recipe_library"]
         T3["create_meal_plan"]
-        CREW["CrewAI Workflow - verify implementation"]
     end
 
     subgraph RAPI["Recipe API"]
@@ -94,65 +92,39 @@ flowchart TD
 
     subgraph PDFDB["PDF Processing and Vector Database"]
         PYMUPDF["PyMuPDF"]
-        CHUNK["Text Chunking - if implemented"]
-        ST["Sentence Transformers - chunk embeddings"]
-        STQ["Sentence Transformers - question embedding"]
+        CHUNK["Text Chunking"]
+        ST["Sentence Transformers"]
+        STQ["Sentence Transformers"]
         CHROMA[("ChromaDB")]
     end
 
     U --> FE
     FE <-->|"HTTP request / JSON response"| API
 
-    %% Recipe Finder and Details
     API <-->|"ingredients / recipe results"| S1
-    S1 <-->|"search and lookup / recipes"| MEALDB
+    S1 <-->|"search and lookup"| MEALDB
 
-    %% Cooking Assistant
     API <-->|"question / answer"| AG
     AG <-->|"prompt / AI response"| GROQ
-    AG -->|"selects tool"| T1
-    AG -->|"selects tool"| T2
-    AG -->|"selects tool"| T3
 
-    T1 <-->|"ingredients / matching recipes"| MEALDB
+    AG -->|"uses tool"| T1
+    AG -->|"uses tool"| T2
+    AG -->|"uses tool"| T3
 
-    %% PDF Question Answering
+    T1 <-->|"recipe search"| MEALDB
+
     T2 -->|"question"| STQ
     STQ -->|"question embedding"| CHROMA
     CHROMA -->|"retrieved chunks"| T2
 
-    %% Meal Planning - connection needs verification
-    T3 -.->|"connection to CrewAI - verify"| CREW
-
-    %% PDF Upload and Ingestion
-    API <-->|"PDF file / upload status"| S4
-    S4 -->|"PDF file"| PYMUPDF
-    PYMUPDF -->|"extracted text"| CHUNK
-    CHUNK -->|"text chunks"| ST
+    API <-->|"PDF upload / status"| S4
+    S4 --> PYMUPDF
+    PYMUPDF --> CHUNK
+    CHUNK --> ST
     ST -->|"embeddings and text"| CHROMA
 
-    %% Shopping List
-    API <-->|"list request / shopping list"| S7
+    API <-->|"shopping list request / response"| S7
     S7 <-->|"prompt / generated list"| GROQ
-
-    %% Styling
-    classDef user fill:#eceff1,stroke:#455a64,color:#263238
-    classDef frontend fill:#e3f2fd,stroke:#1565c0,color:#0d47a1
-    classDef backend fill:#e8f5e9,stroke:#2e7d32,color:#1b5e20
-    classDef agent fill:#fffde7,stroke:#f9a825,color:#5d4037
-    classDef tool fill:#fff8e1,stroke:#f9a825,color:#5d4037
-    classDef recipe fill:#fce4ec,stroke:#c2185b,color:#880e4f
-    classDef llm fill:#fff3e0,stroke:#ef6c00,color:#e65100
-    classDef pdf fill:#f3e5f5,stroke:#6a1b9a,color:#4a148c
-
-    class U user
-    class F1,F2,F3,F4,F5 frontend
-    class API,S1,S4,S7 backend
-    class AG,CREW agent
-    class T1,T2,T3 tool
-    class MEALDB recipe
-    class GROQ llm
-    class PYMUPDF,CHUNK,ST,STQ,CHROMA pdf
 ```
 ### Frontend – Streamlit
 

@@ -1,4 +1,4 @@
-
+<img width="944" height="482" alt="image" src="https://github.com/user-attachments/assets/e6b5ccfe-efe5-4777-b3d9-4fa4f65d6cf9" />
 # 🍳 RecipePilot – AI-Powered Recipe Assistant
 
 ## Project Overview
@@ -124,31 +124,41 @@ The following screenshots demonstrate the main interfaces and features of Recipe
 
 ### Home Page
 
-![RecipePilot Home Page](screenshots/home.png)
+![RecipePilot Home Page](<img width="944" height="482" alt="image" src="https://github.com/user-attachments/assets/358b20c1-f683-4c88-949b-ca21d1a91c1c" />
+)
+<img width="896" height="365" alt="image" src="https://github.com/user-attachments/assets/4347ab9d-1696-468a-a073-b9864a7e12fb" />
+
 
 ### Recipe Finder
 
-![Recipe Finder](screenshots/recipe-finder.png)
+![Recipe Finder](<img width="780" height="479" alt="image" src="https://github.com/user-attachments/assets/903eec89-f65f-4f76-b51b-53dcc1c50f72" />
+)
+
 
 ### Recipe Details
 
-![Recipe Details](screenshots/recipe-details.png)
+![Recipe Details](<img width="602" height="454" alt="image" src="https://github.com/user-attachments/assets/47e9f52a-b281-4b3e-8339-2ca5cceeaf3f" />
+)
 
 ### AI Cooking Assistant
 
-![AI Cooking Assistant](screenshots/ai-assistant.png)
+![AI Cooking Assistant](<img width="897" height="459" alt="image" src="https://github.com/user-attachments/assets/d2aaf9b6-c5ae-4327-aaa5-ce8a1694570e" />
+)
 
 ### Recipe Library
 
-![Recipe Library](screenshots/recipe-library.png)
+![Recipe Library](<img width="928" height="488" alt="image" src="https://github.com/user-attachments/assets/3589c016-6188-4dba-aa2f-550de3b61cb4" />
+)
 
 ### AI Meal Planner
 
-![AI Meal Planner](screenshots/meal-planner.png)
+![AI Meal Planner](<img width="938" height="462" alt="image" src="https://github.com/user-attachments/assets/94bac98c-65c8-4a2d-bc2f-d7907eee1856" />
+)
 
 ### Shopping List
 
-![Shopping List](screenshots/shopping-list.png)
+![Shopping List](<img width="932" height="469" alt="image" src="https://github.com/user-attachments/assets/d3e52f9f-0671-49bf-9972-1b49092e2dec" />
+)
 
 ---
 

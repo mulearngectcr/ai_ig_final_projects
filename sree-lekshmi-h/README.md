@@ -1,28 +1,28 @@
 
 # 🍳 RecipePilot – AI-Powered Recipe Assistant
 
-RecipePilot is an AI-powered recipe assistant designed to make cooking easier, smarter, and more organized. It helps users discover recipes based on available ingredients, explore cooking instructions, interact with an AI cooking assistant, and manage their personal recipe collection.
+## Project Overview
 
-The application combines external recipe data, Large Language Models (LLMs), and Retrieval-Augmented Generation (RAG) to provide an interactive cooking experience.
+RecipePilot is an AI-powered recipe assistant that helps users discover recipes, understand cooking instructions, organize personal recipes, and get cooking assistance through natural language conversations.
+
+It combines recipe discovery through an external API with Large Language Models (LLMs) and Retrieval-Augmented Generation (RAG) to provide an interactive cooking experience.
+
+## Problem Statement
+
+Deciding what to cook with the ingredients available at home can be challenging. Users often spend time searching multiple websites for suitable recipes, understanding cooking instructions, planning meals, and maintaining personal recipe collections.
+
+Traditional recipe platforms mainly provide predefined recipes and limited interaction. They may not offer personalized conversational assistance or allow users to retrieve information from their own recipe documents.
+
+RecipePilot addresses these challenges by bringing recipe discovery, AI-powered cooking assistance, personal recipe management, PDF-based question answering, meal planning, and shopping-list generation into one application.
 
 ---
 
-## 📌 Problem Statement
-
-People often struggle to decide what to cook with the ingredients available at home. Finding suitable recipes, understanding cooking instructions, planning meals, and organizing personal recipes across different sources can be time-consuming.
-
-Traditional recipe platforms mainly provide predefined recipes and limited interaction. They do not necessarily offer personalized conversational assistance or the ability to retrieve information from a user's own recipe documents.
-
-**RecipePilot addresses these challenges** by bringing recipe discovery, AI-powered cooking assistance, PDF-based recipe retrieval, meal planning, and shopping-list generation into a single application.
-
----
-
-## ✨ Key Features
+## Features
 
 ### 1. Recipe Finder
 - Search for recipes using available ingredients.
-- Retrieve recipes using TheMealDB API.
-- Explore matching recipes and their details.
+- Retrieve matching recipes using TheMealDB API.
+- Explore available recipe information.
 
 ### 2. Recipe Details
 - View recipe ingredients and quantities.
@@ -30,19 +30,19 @@ Traditional recipe platforms mainly provide predefined recipes and limited inter
 - Explore individual recipes.
 
 ### 3. AI Cooking Assistant
-- Ask cooking-related questions in natural language.
-- Get AI-generated cooking suggestions and explanations.
+- Ask cooking-related questions using natural language.
+- Receive AI-generated cooking suggestions and explanations.
 - Maintain conversation history during the session.
 
 ### 4. Personal Recipe Library
 - Upload PDF documents containing recipes.
-- Extract text from uploaded PDF files.
+- Extract text from uploaded documents.
 - Manage uploaded recipe documents.
 
-### 5. PDF-Based Question Answering (RAG)
-- Retrieve relevant information from uploaded recipe documents.
-- Generate answers using retrieved context and an LLM.
-- Ask questions about personal recipe collections.
+### 5. PDF-Based Question Answering
+- Retrieve relevant information from uploaded recipe PDFs.
+- Use retrieved content as context for AI-generated answers.
+- Ask questions about personal recipe documents using RAG.
 
 ### 6. AI Meal Planner
 - Generate meal-planning suggestions using AI.
@@ -52,142 +52,110 @@ Traditional recipe platforms mainly provide predefined recipes and limited inter
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
-RecipePilot follows a client-server architecture with a Streamlit frontend and FastAPI backend.
+RecipePilot follows a client-server architecture consisting of a Streamlit frontend and a FastAPI backend.
 
-```mermaid
-flowchart TD
-    A[User] --> B[Streamlit Frontend]
-    B --> C[FastAPI Backend]
+### Frontend – Streamlit
 
-    C --> D[Recipe API Service]
-    C --> E[AI Cooking Assistant]
-    C --> F[PDF Processing Service]
-    C --> G[Meal Planner]
-    C --> H[Shopping List]
+The frontend provides the user interface for recipe searching, viewing recipe details, interacting with the AI assistant, uploading recipe documents, generating meal plans, and managing shopping lists.
 
-    D --> I[TheMealDB API]
-    E --> J[Groq LLM]
-    F --> K[PyMuPDF]
-    F --> L[Sentence Transformers]
-    L --> M[ChromaDB]
-    M --> E
+### Backend – FastAPI
 
-    J --> C
-    I --> C
-    E --> C
-    G --> C
-    H --> C
+The backend handles API requests, application logic, communication with external services, and AI-related operations. Pydantic is used for request and response validation.
 
-    C --> B
-    B --> A
-```
+### AI Integration – Groq
 
-### Architecture Components
+Groq provides access to the Large Language Model used for conversational cooking assistance and other AI-powered features.
 
-| Component | Technology | Responsibility |
-|---|---|---|
-| Frontend | Streamlit | User interface and interaction |
-| Backend | FastAPI | API endpoints and application logic |
-| Data Validation | Pydantic | Request and response validation |
-| LLM | Groq | AI-generated responses |
-| Recipe API | TheMealDB | Recipe search and information |
-| PDF Processing | PyMuPDF | Extracting text from PDF files |
-| Embeddings | Sentence Transformers | Converting text into vector embeddings |
-| Vector Database | ChromaDB | Storing and retrieving recipe information |
+### Recipe Data – TheMealDB
+
+TheMealDB API is integrated to retrieve recipe information based on ingredients provided by users.
+
+### Retrieval-Augmented Generation (RAG)
+
+The Recipe Library supports PDF uploads. PyMuPDF extracts text from uploaded documents. Sentence Transformers converts the extracted text into embeddings, which are stored in ChromaDB.
+
+When a user asks a question about uploaded recipes, the system retrieves relevant information from the vector database and provides it as context to the LLM to generate an answer.
+
+### Frontend and Backend Communication
+
+The Streamlit frontend communicates with the FastAPI backend through HTTP requests. The backend processes the requests and returns responses to the frontend for display.
 
 ---
 
-## 🧠 Concept Breakdown
+## Concept Breakdown
 
-### 1. External API Integration
-RecipePilot integrates with TheMealDB to retrieve recipe information based on user-provided ingredients.
-
-### 2. Large Language Models
-Groq provides access to the LLM used for conversational cooking assistance, meal-planning suggestions, and AI-generated responses.
-
-### 3. Retrieval-Augmented Generation (RAG)
-The Recipe Library supports PDF uploads. PyMuPDF extracts text from documents, Sentence Transformers generates embeddings, and ChromaDB stores the vector representations.
-
-When a user asks a question related to uploaded recipes:
-1. The question is processed.
-2. Relevant information is retrieved from ChromaDB.
-3. Retrieved context is provided to the LLM.
-4. The LLM generates a context-aware response.
-
-### 4. Client-Server Communication
-The Streamlit frontend communicates with the FastAPI backend through HTTP requests. The backend handles API operations, external service integration, and AI processing.
+| Concept | Implementation in RecipePilot |
+|---|---|
+| API Integration | TheMealDB for recipe search and information |
+| LLM Integration | Groq for AI-generated responses |
+| Retrieval-Augmented Generation | Retrieving relevant information from uploaded recipe PDFs |
+| Text Extraction | PyMuPDF for extracting text from PDFs |
+| Text Embeddings | Sentence Transformers (`all-MiniLM-L6-v2`) |
+| Vector Database | ChromaDB for storing and retrieving embeddings |
+| Client-Server Architecture | Streamlit frontend communicating with FastAPI backend |
+| Data Validation | Pydantic |
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
-**Frontend**
-- Python
-- Streamlit
-
-**Backend**
-- Python
-- FastAPI
-- Pydantic
-- Uvicorn
-
-**AI and RAG**
-- Groq
-- Sentence Transformers
-- ChromaDB
-- PyMuPDF
-
-**External API**
-- TheMealDB
-
-**Other Libraries**
-- HTTPX
-- Requests
-- Python-dotenv
+| Category | Technologies |
+|---|---|
+| Programming Language | Python |
+| Frontend | Streamlit |
+| Backend | FastAPI |
+| API Server | Uvicorn |
+| LLM | Groq (`openai/gpt-oss-20b`) |
+| Recipe API | TheMealDB |
+| Embeddings | Sentence Transformers |
+| Vector Database | ChromaDB |
+| PDF Processing | PyMuPDF |
+| Data Validation | Pydantic |
+| HTTP Communication | HTTPX, Requests |
+| Environment Configuration | Python-dotenv |
 
 ---
 
-## 📸 Application Screenshots
+## Application Screenshots
 
-Screenshots of the application are provided below.
+The following screenshots demonstrate the main interfaces and features of RecipePilot.
 
-> Create a folder named `screenshots` in your project directory and place your screenshots inside it. Replace the example filenames below with your actual image filenames.
-
-### 1. Home Page
+### Home Page
 
 ![RecipePilot Home Page](screenshots/home.png)
 
-### 2. Recipe Finder
+### Recipe Finder
 
 ![Recipe Finder](screenshots/recipe-finder.png)
 
-### 3. Recipe Details
+### Recipe Details
 
 ![Recipe Details](screenshots/recipe-details.png)
 
-### 4. AI Cooking Assistant
+### AI Cooking Assistant
 
 ![AI Cooking Assistant](screenshots/ai-assistant.png)
 
-### 5. Recipe Library
+### Recipe Library
 
 ![Recipe Library](screenshots/recipe-library.png)
 
-### 6. AI Meal Planner
+### AI Meal Planner
 
 ![AI Meal Planner](screenshots/meal-planner.png)
 
-### 7. Shopping List
+### Shopping List
 
 ![Shopping List](screenshots/shopping-list.png)
 
 ---
 
-## ⚙️ Installation and Setup
+## Installation and Setup
 
 ### Prerequisites
+
 - Python 3.10 or later
 - Git
 - Groq API key
@@ -205,7 +173,7 @@ cd YOUR_PROJECT_FOLDER
 python -m venv venv
 ```
 
-Activate it on Windows:
+Activate the environment on Windows:
 
 ```powershell
 venv\Scripts\activate
@@ -225,43 +193,43 @@ Create a `.env` file in the project root:
 GROQ_API_KEY=your_groq_api_key
 ```
 
-Do not commit your actual `.env` file or API key to GitHub.
+Replace the placeholder with your actual Groq API key.
 
-### 5. Start the Backend
+**Important:** Never upload your actual `.env` file or API key to GitHub.
 
-From the project root:
+### 5. Run the Backend
+
+From the project root, execute:
 
 ```bash
 uvicorn backend.app.main:app --reload
 ```
 
-FastAPI documentation:
+The FastAPI documentation will be available at:
 
-```text
 http://127.0.0.1:8000/docs
-```
 
-### 6. Start the Frontend
+### 6. Run the Frontend
 
-Open another terminal:
+Open a separate terminal, activate the virtual environment, and execute:
 
 ```bash
 streamlit run frontend/app.py
 ```
 
-The Streamlit application will open in your browser.
+The RecipePilot application will open in your browser.
 
 ---
 
-## 🎥 Project Demonstration
+## Project Demonstration
 
-RecipePilot demonstration video:
+Video demonstration of RecipePilot running locally:
 
 [Watch RecipePilot Demo](https://youtu.be/nH6msVJ7EX8)
 
 ---
 
-## 🔐 Environment Variables
+## Environment Variables
 
 | Variable | Description |
 |---|---|
@@ -269,13 +237,12 @@ RecipePilot demonstration video:
 
 ---
 
-## 👩‍💻 Project Information
+## Project Information
 
-**Project:** RecipePilot – AI-Powered Recipe Assistant
+**Project Name:** RecipePilot
 
-**Category:** Artificial Intelligence / Full-Stack Development
+**Project Type:** AI-Powered Recipe Assistant
 
-**Developed using:** Python, Streamlit, FastAPI, Groq, ChromaDB and TheMealDB
+**Domain:** Artificial Intelligence and Full-Stack Development
 
----
-
+**Developed Using:** Python, Streamlit, FastAPI, Groq, ChromaDB and TheMealDB

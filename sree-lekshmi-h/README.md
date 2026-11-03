@@ -331,6 +331,8 @@ Video demonstration of RecipePilot running locally:
 
 [Watch RecipePilot Demo](https://youtu.be/nH6msVJ7EX8)
 
+Frontend link:(demonstration only):[link](https://recipe-pilot.streamlit.app)
+
 ---
 
 ## Environment Variables

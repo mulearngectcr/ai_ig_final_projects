@@ -58,6 +58,7 @@ RecipePilot addresses these challenges by bringing recipe discovery, AI-powered 
 RecipePilot follows a client-server architecture consisting of a Streamlit frontend and a FastAPI backend.
 flowchart TD
 ```mermaid
+    flowchart TD
     U(["User"])
 
     subgraph FE["Streamlit Frontend"]

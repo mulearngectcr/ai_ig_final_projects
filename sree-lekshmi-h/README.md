@@ -57,7 +57,7 @@ RecipePilot addresses these challenges by bringing recipe discovery, AI-powered 
 
 RecipePilot follows a client-server architecture consisting of a Streamlit frontend and a FastAPI backend.
 flowchart TD
-
+```mermaid
     U(["User"])
 
     subgraph FE["Streamlit Frontend"]
@@ -152,7 +152,7 @@ flowchart TD
     class MEALDB recipe
     class GROQ llm
     class PYMUPDF,CHUNK,ST,STQ,CHROMA pdf
-
+```
 ### Frontend – Streamlit
 
 The frontend provides the user interface for recipe searching, viewing recipe details, interacting with the AI assistant, uploading recipe documents, generating meal plans, and managing shopping lists.

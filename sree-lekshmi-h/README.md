@@ -56,104 +56,102 @@ RecipePilot addresses these challenges by bringing recipe discovery, AI-powered 
 ## Architecture
 
 RecipePilot follows a client-server architecture consisting of a Streamlit frontend and a FastAPI backend.
-```mermaid
 flowchart TD
 
-    subgraph USER["User"]
-        U["User<br/>RecipePilot"]
-    end
+    U(["User"])
 
     subgraph FE["Streamlit Frontend"]
-        direction LR
-        F1["Recipe Finder"]
-        F2["Recipe Details"]
-        F3["AI Cooking Assistant<br/>(chat history in session state)"]
-        F4["Personal Recipe Library"]
-        F5["AI Meal Planner"]
-        F6["Shopping List"]
+        F1["Recipe Finder and Details"]
+        F2["Cooking Assistant - chat history in session state"]
+        F3["Recipe Library - PDF upload"]
+        F4["AI Meal Planner"]
+        F5["Shopping List"]
     end
 
     subgraph BE["FastAPI Backend"]
-        direction TB
-        API["API Endpoints / Routes<br/>(Pydantic request and response validation)"]
-        subgraph SVC["Application Services"]
-            direction LR
-            S1["Recipe Search Service"]
-            S2["Recipe Details Service"]
-            S3["AI Assistant / Agent Logic"]
-            S4["PDF Ingestion Service"]
-            S5["PDF Retrieval Service<br/>(RAG)"]
-            S6["Meal Planning Service"]
-            S7["Shopping List Service"]
-        end
-        API --> SVC
+        API["API Routes with Pydantic validation"]
+        S1["Recipe Search and Details Services"]
+        S4["PDF Ingestion Service"]
+        S7["Shopping List Service - calls ask_assistant"]
+    end
+
+    subgraph AGENT["Agent and Tool Layer"]
+        AG["Cooking Assistant Agent - selects a tool or answers directly"]
+        T1["search_recipes"]
+        T2["search_recipe_library"]
+        T3["create_meal_plan"]
+        CREW["CrewAI Workflow - verify implementation"]
     end
 
     subgraph RAPI["Recipe API"]
         MEALDB["TheMealDB API"]
     end
 
+    subgraph LLM["AI / LLM"]
+        GROQ["Groq LLM - openai/gpt-oss-20b"]
+    end
+
     subgraph PDFDB["PDF Processing and Vector Database"]
-        direction TB
-        PYMUPDF["PyMuPDF<br/>Text Extraction"]
-        CHUNK["Text Chunking"]
-        ST["Sentence Transformers<br/>all-MiniLM-L6-v2"]
-        CHROMA[("ChromaDB<br/>Vector Store")]
-        PYMUPDF -->|"extracted text"| CHUNK
-        CHUNK -->|"text chunks"| ST
-        ST -->|"embeddings + chunk text"| CHROMA
+        PYMUPDF["PyMuPDF"]
+        CHUNK["Text Chunking - if implemented"]
+        ST["Sentence Transformers - chunk embeddings"]
+        STQ["Sentence Transformers - question embedding"]
+        CHROMA[("ChromaDB")]
     end
 
-    subgraph LLM["AI / LLM Services"]
-        GROQ["Groq LLM<br/>openai/gpt-oss-20b"]
-    end
+    U --> FE
+    FE <-->|"HTTP request / JSON response"| API
 
-    %% User to Frontend
-    U -->|"uses"| FE
+    %% Recipe Finder and Details
+    API <-->|"ingredients / recipe results"| S1
+    S1 <-->|"search and lookup / recipes"| MEALDB
 
-    %% Frontend to Backend
-    FE -->|"HTTP requests"| API
-    API -->|"HTTP responses (JSON)"| FE
+    %% Cooking Assistant
+    API <-->|"question / answer"| AG
+    AG <-->|"prompt / AI response"| GROQ
+    AG -->|"selects tool"| T1
+    AG -->|"selects tool"| T2
+    AG -->|"selects tool"| T3
 
-    %% Workflow 1 and 2: Recipe Finder and Details (TheMealDB only)
-    S1 -->|"search by ingredients"| MEALDB
-    MEALDB -->|"matching recipes"| S1
-    S2 -->|"lookup recipe by ID"| MEALDB
-    MEALDB -->|"ingredients, quantities, instructions"| S2
+    T1 <-->|"ingredients / matching recipes"| MEALDB
 
-    %% Workflow 3, 6, 7: Groq-based workflows
-    S3 -->|"cooking question / prompt"| GROQ
-    GROQ -->|"AI response"| S3
-    S6 -->|"meal planning prompt"| GROQ
-    GROQ -->|"meal suggestions"| S6
-    S7 -->|"shopping list prompt"| GROQ
-    GROQ -->|"generated list"| S7
+    %% PDF Question Answering
+    T2 -->|"question"| STQ
+    STQ -->|"question embedding"| CHROMA
+    CHROMA -->|"retrieved chunks"| T2
 
-    %% Workflow 4: PDF upload and ingestion
-    S4 -->|"PDF upload"| PYMUPDF
+    %% Meal Planning - connection needs verification
+    T3 -.->|"connection to CrewAI - verify"| CREW
 
-    %% Workflow 5: PDF question answering (RAG)
-    S5 -->|"question text"| ST
-    ST -->|"question embedding"| CHROMA
-    CHROMA -->|"retrieved chunks"| S5
-    S5 -->|"question + retrieved PDF context"| GROQ
-    GROQ -->|"grounded answer"| S5
+    %% PDF Upload and Ingestion
+    API <-->|"PDF file / upload status"| S4
+    S4 -->|"PDF file"| PYMUPDF
+    PYMUPDF -->|"extracted text"| CHUNK
+    CHUNK -->|"text chunks"| ST
+    ST -->|"embeddings and text"| CHROMA
+
+    %% Shopping List
+    API <-->|"list request / shopping list"| S7
+    S7 <-->|"prompt / generated list"| GROQ
 
     %% Styling
+    classDef user fill:#eceff1,stroke:#455a64,color:#263238
     classDef frontend fill:#e3f2fd,stroke:#1565c0,color:#0d47a1
     classDef backend fill:#e8f5e9,stroke:#2e7d32,color:#1b5e20
-    classDef ai fill:#fff3e0,stroke:#ef6c00,color:#e65100
+    classDef agent fill:#fffde7,stroke:#f9a825,color:#5d4037
+    classDef tool fill:#fff8e1,stroke:#f9a825,color:#5d4037
     classDef recipe fill:#fce4ec,stroke:#c2185b,color:#880e4f
+    classDef llm fill:#fff3e0,stroke:#ef6c00,color:#e65100
     classDef pdf fill:#f3e5f5,stroke:#6a1b9a,color:#4a148c
-    classDef user fill:#eceff1,stroke:#455a64,color:#263238
 
-    class F1,F2,F3,F4,F5,F6 frontend
-    class API,S1,S2,S3,S4,S5,S6,S7 backend
-    class GROQ ai
-    class MEALDB recipe
-    class PYMUPDF,CHUNK,ST,CHROMA pdf
     class U user
-```
+    class F1,F2,F3,F4,F5 frontend
+    class API,S1,S4,S7 backend
+    class AG,CREW agent
+    class T1,T2,T3 tool
+    class MEALDB recipe
+    class GROQ llm
+    class PYMUPDF,CHUNK,ST,STQ,CHROMA pdf
 
 ### Frontend – Streamlit
 

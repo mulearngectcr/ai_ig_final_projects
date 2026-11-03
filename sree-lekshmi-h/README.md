@@ -106,7 +106,7 @@ sree-lekshmi-h/
 ├── .gitignore
 ├── requirements.txt
 └── README.md
-
+```
 ## Concept Breakdown
 
 | Concept | Implementation in RecipePilot |

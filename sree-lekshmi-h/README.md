@@ -84,6 +84,28 @@ When a user asks a question about uploaded recipes, the system retrieves relevan
 The Streamlit frontend communicates with the FastAPI backend through HTTP requests. The backend processes the requests and returns responses to the frontend for display.
 
 ---
+## 📁 Project Structure
+
+```text
+sree-lekshmi-h/
+│
+├── backend/
+│   └── app/
+│       ├── agents/
+│       ├── api/
+│       ├── schemas/
+│       ├── services/
+│       └── main.py
+│
+├── frontend/
+│   ├── pages/
+│   ├── app.py
+│   ├── api_client.py
+│   └── hero_slideshow.py
+│
+├── .gitignore
+├── requirements.txt
+└── README.md
 
 ## Concept Breakdown
 

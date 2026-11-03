@@ -10,18 +10,28 @@ st.set_page_config(
 st.title("🛒 Shopping List")
 st.write("Generate a combined shopping list from your recipes.")
 
+st.info(
+    "💡 You can ask for ingredients from recipes in your uploaded PDFs "
+    "or enter dish names to generate a combined shopping list."
+)
+
+st.page_link(
+    "pages/3_Recipe_Library.py",
+    label=" Go to Recipe Library to Upload PDFs",
+    icon="📚"
+)
 st.divider()
 
 # ---------------------------------
 # ENTER RECIPES
 # ---------------------------------
 
-st.subheader("Enter Your Recipes")
+st.subheader("Enter Dish Names or Ask About Your Uploaded Recipes")
 
 recipes = st.text_area(
     "Recipe names",
-    placeholder="Example:\nChicken biryani\nPaneer butter masala\nVegetable fried rice",
-    height=150
+    placeholder="Example:\nChicken biryani\nPaneer butter masala\nOr ask about your uploaded recipes, e.g., 'What ingredients are needed for my uploaded lasagna recipe?'",
+    height=200
 )
 
 # ---------------------------------

@@ -10,6 +10,16 @@ st.set_page_config(
 
 st.title("🤖 AI Cooking Assistant")
 st.write("Ask anything about cooking, ingredients and recipes.")
+st.info(
+    " Want to ask questions about your own recipes? "
+    "Upload your recipe PDFs in the Recipe Library first."
+)
+
+st.page_link(
+    "pages/3_Recipe_Library.py",
+    label=" Go to Recipe Library to Upload PDFs",
+    icon="📚"
+)
 
 st.divider()
 

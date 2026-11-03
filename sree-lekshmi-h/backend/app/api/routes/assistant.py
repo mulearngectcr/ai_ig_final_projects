@@ -1,3 +1,5 @@
+import traceback
+
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 from typing import List, Literal
@@ -19,19 +21,34 @@ class AssistantRequest(BaseModel):
 
 @router.post("/ask")
 def ask_assistant(request: AssistantRequest):
+
     if not request.question.strip():
-        raise HTTPException(status_code=400, detail="Question cannot be empty")
+        raise HTTPException(
+            status_code=400,
+            detail="Question cannot be empty"
+        )
 
     try:
-        history = [message.model_dump() for message in request.history]
+        history = [
+            message.model_dump()
+            for message in request.history
+        ]
 
-        answer = ask_cooking_assistant(request.question, history)
+        answer = ask_cooking_assistant(
+            request.question,
+            history
+        )
 
         return {
-    "question": request.question,
-    "answer": answer["answer"],
-    "source": answer["source"]
-   }
+            "question": request.question,
+            "answer": answer["answer"],
+            "source": answer["source"]
+        }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        traceback.print_exc()
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )

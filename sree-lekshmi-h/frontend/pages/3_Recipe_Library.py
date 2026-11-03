@@ -122,7 +122,19 @@ try:
 except requests.exceptions.RequestException as e:
     st.error(f"Could not load uploaded PDFs: {e}")
 
+if result["files"]:
+    st.success("Your recipe PDF library is ready!")
 
+    st.info(
+        "🤖 Your recipes have been added to the library. "
+        "You can now ask questions about their contents in the Recipe Assistant."
+    )
+
+    st.page_link(
+        "pages/2_Recipe_Assistant.py",
+        label="🤖 Ask Questions in Recipe Assistant",
+        icon="🤖"
+    )
 st.divider()
 
 # ---------------------------------------

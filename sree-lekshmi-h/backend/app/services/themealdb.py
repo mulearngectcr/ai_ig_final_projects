@@ -2,17 +2,19 @@ import httpx
 
 BASE_URL="https://www.themealdb.com/api/json/v1/1"\
 
-def search_recipes(ingredient):
-    url=f"{BASE_URL}/filter.php"
 
-    params={
-        "i":ingredient
+def search_recipes(name):
+    url = f"{BASE_URL}/search.php"
+
+    params = {
+        "s": name
     }
 
-    response=httpx.get(url,params=params,timeout=15)
+    response = httpx.get(url, params=params, timeout=15)
     response.raise_for_status()
 
-    data=response.json()
+    data = response.json()
+
     return data.get("meals") or []
 
 def get_recipe_details(recipe_id):

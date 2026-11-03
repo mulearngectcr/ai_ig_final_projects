@@ -103,9 +103,11 @@ sree-lekshmi-h/
 │   ├── api_client.py
 │   └── hero_slideshow.py
 │
+├── .env.example
 ├── .gitignore
 ├── requirements.txt
 └── README.md
+
 ```
 ## Concept Breakdown
 

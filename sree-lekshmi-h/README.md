@@ -279,3 +279,4 @@ Video demonstration of RecipePilot running locally:
 **Domain:** Artificial Intelligence and Full-Stack Development
 
 **Developed Using:** Python, Streamlit, FastAPI, Groq, ChromaDB and TheMealDB
+```

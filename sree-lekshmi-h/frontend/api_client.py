@@ -1,6 +1,6 @@
 import requests
 
-BASE_URL = "http://127.0.0.1:8000"
+BASE_URL = "https://recipe-pilot-production-885a.up.railway.app/"
 
 
 def search_recipes(name):

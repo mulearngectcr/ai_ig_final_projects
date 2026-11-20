@@ -1,0 +1,1 @@
+"""CampusPrep AI package."""
